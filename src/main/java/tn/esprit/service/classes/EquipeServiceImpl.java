@@ -2,16 +2,25 @@ package tn.esprit.service.classes;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tn.esprit.dao.entities.Equipe;
+import tn.esprit.dao.entities.Niveau;
 import tn.esprit.dao.repository.EquipeRepository;
+import tn.esprit.dto.ContratDto;
 import tn.esprit.dto.EquipeDto;
 import tn.esprit.dto.EtudiantDto;
 import tn.esprit.dto.mapper.EquipeMapper;
 import tn.esprit.service.interfaces.EquipeService;
 
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
+import static tn.esprit.dao.entities.Niveau.EXPERT;
+import static tn.esprit.dao.entities.Niveau.SENIOR;
 
 @Service
 @Slf4j
@@ -72,5 +81,36 @@ public class EquipeServiceImpl implements EquipeService {
             log.info("equipe : " + equipe);
         }
         return equipeDtos;
+    }
+    @Scheduled(cron = "*/05 * * * * *" )
+    @Transactional
+    @Override
+    public void faireEvoluerEquipes(){
+        Long compt = 0L;
+        List<Equipe> equipeList = equipeRep.findAll();
+        List<EquipeDto> equipeListDto = eqMapper.toDtoList(equipeList);
+        for (EquipeDto equipe : equipeListDto) {
+            List<EtudiantDto> list = equipe.getEtudiants();
+            if (list.stream().count() >= 3) {
+                for (EtudiantDto etudiant : list) {
+                    List<ContratDto> conList = etudiant.getContrats();
+                    for (ContratDto contrat : conList) {
+                        long dateBeforeInMs = contrat.getDateDebutContrat().getTime();
+                        long dateAfterInMs = contrat.getDateFinContrat().getTime();
+                        long timeDiff = Math.abs(dateBeforeInMs - dateAfterInMs);
+                        long daysDiff = TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS);
+                        if (daysDiff>=365)
+                        {
+                            compt++;
+                            if (Objects.equals(equipe.getNiveau().toString(), "JUNIOR") && compt >=1 ){
+                                equipe.setNiveau(SENIOR);
+                            } else if (Objects.equals(equipe.getNiveau().toString(), "SENIOR") && compt >=1) {
+                                equipe.setNiveau(EXPERT);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

@@ -17,4 +17,5 @@ public interface EquipeService {
     public Equipe mettreAjourEquipe(int id);
     public void supprimerEquipe(int id);
     public List<EquipeDto> chercherEquipes ();
+    public void faireEvoluerEquipes();
 }

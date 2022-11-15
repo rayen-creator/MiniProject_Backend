@@ -4,6 +4,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import tn.esprit.dao.entities.Contrat;
 import tn.esprit.dto.ContratDto;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,5 +21,9 @@ public interface ContratService {
     List<ContratDto> chercherContratsDto();
 
     @Scheduled(cron="* * 13 * * *")
-    String retrieveAndUpdateStatusContrat();
+     public String retrieveAndUpdateStatusContrat();
+
+    public List<ContratDto> ContratsValides(Date startDate, Date endDate);
+    public  Integer nbContratsValides(Date startDate, Date endDate);
+    public float getChiffreAffaireEntreDeuxDate(Date startDate, Date endDate);
 }

@@ -1,6 +1,7 @@
 package tn.esprit.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,7 @@ import tn.esprit.dto.ContratDto;
 import tn.esprit.service.interfaces.ContratService;
 import javax.validation.Valid;
 
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -55,4 +57,20 @@ public class ContratController {
         }
     }
 
+    @GetMapping("conByDate/{dateDebut}/{dateFin}")
+    public List<ContratDto> displayContratByDate(@PathVariable("dateDebut") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateDebut, @PathVariable("dateFin") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateFin) {
+
+        return cServ.ContratsValides(dateDebut,dateFin);
+    }
+    @GetMapping("nbConByDate/{dateDebut}/{dateFin}")
+    public Integer displayNbContratByDate(@PathVariable("dateDebut") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateDebut, @PathVariable("dateFin") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateFin) {
+
+        return cServ.nbContratsValides(dateDebut,dateFin);
+    }
+
+    @GetMapping("totalPaid/{dateDebut}/{dateFin}")
+    public float displayTotal(@PathVariable("dateDebut") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateDebut, @PathVariable("dateFin") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateFin) {
+
+        return cServ.getChiffreAffaireEntreDeuxDate(dateDebut,dateFin);
+    }
 }
