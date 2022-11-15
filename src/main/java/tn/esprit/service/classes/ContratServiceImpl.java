@@ -6,6 +6,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tn.esprit.dao.entities.Contrat;
 import tn.esprit.dao.repository.ContratRepository;
+import tn.esprit.dto.ContratDto;
+import tn.esprit.dto.EtudiantDto;
+import tn.esprit.dto.mapper.ContratMapper;
 import tn.esprit.service.interfaces.ContratService;
 
 import java.text.SimpleDateFormat;
@@ -18,15 +21,27 @@ import java.util.Optional;
 public class ContratServiceImpl implements ContratService {
     @Autowired
     ContratRepository cRep;
+    @Autowired
+    ContratMapper cMapper;
 
     @Override
     public Optional<Contrat> afficherContrat(int id) {
 
         Contrat contrat = cRep.findById(id).orElseThrow(() -> new RuntimeException(
-                        "cartment with Id" + id + " does not exist"
+                        "contrat with Id" + id + " does not exist"
                 )
         );
         return cRep.findById(id);
+    }
+    @Override
+    public Optional<ContratDto> afficherContratDto(int id) {
+
+        Contrat contrat = cRep.findById(id).orElseThrow(() -> new RuntimeException(
+                        "contrat with Id" + id + " does not exist"
+                )
+        );
+        ContratDto contratDto = cMapper.toDto(contrat);
+        return Optional.ofNullable(contratDto);
     }
 
     @Override
@@ -57,6 +72,15 @@ public class ContratServiceImpl implements ContratService {
             log.info("contrat : " + contrat);
         }
         return contrats;
+    }
+    @Override
+    public List<ContratDto> chercherContratsDto() {
+        List<Contrat> contrats = (List<Contrat>) cRep.findAll();
+        List<ContratDto> contratDtoList = cMapper.toDtoList(contrats);
+        for(ContratDto contrat: contratDtoList) {
+            log.info("contrat : " + contrat);
+        }
+        return contratDtoList;
     }
     @Scheduled(cron="* * 13 * * *")
     @Override

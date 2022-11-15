@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.dao.entities.Equipe;
+import tn.esprit.dto.EquipeDto;
 import tn.esprit.service.interfaces.EquipeService;
 import javax.validation.Valid;
 
@@ -20,13 +21,13 @@ public class equipeController {
     EquipeService equipeServ;
 
     @GetMapping
-    public List<Equipe> displayAllTeams() {
+    public List<EquipeDto> displayAllTeams() {
         return equipeServ.chercherEquipes();
     }
 
     @GetMapping("display/{id}")
-    public Optional<Equipe> displayTeamsById(@PathVariable("id") int id) {
-        return equipeServ.afficherEquipe(id);
+    public Optional<EquipeDto> displayTeamsById(@PathVariable("id") int id) {
+        return equipeServ.afficherEquipeDto(id);
     }
 
     @DeleteMapping("delete/{id}")

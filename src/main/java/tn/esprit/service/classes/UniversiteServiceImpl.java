@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.dao.entities.Departement;
-import tn.esprit.dao.entities.Etudiant;
 import tn.esprit.dao.entities.Universite;
 import tn.esprit.dao.repository.DepartementRepository;
 import tn.esprit.dao.repository.UniversiteRepository;
@@ -12,7 +11,6 @@ import tn.esprit.service.interfaces.UniversiteService;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @Slf4j
@@ -70,5 +68,11 @@ public class UniversiteServiceImpl implements UniversiteService {
         Departement d = depRep.findById(idDepartement).get();
         u.getDepartements().add(d);
         uniRep.save(u);
+    }
+    @Override
+    public List<Departement> retrieveDepartementsByUniversite(Integer idUniversite){
+        Optional<Universite> uni = uniRep.findById(idUniversite);
+        List<Departement> listDep = uni.get().getDepartements();
+        return listDep;
     }
 }

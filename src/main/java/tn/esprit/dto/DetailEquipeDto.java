@@ -17,6 +17,6 @@ public class DetailEquipeDto implements Serializable{
     private Integer salle;
     private String thematique;
 
-    private EquipeDto equipe;
+
 
 }

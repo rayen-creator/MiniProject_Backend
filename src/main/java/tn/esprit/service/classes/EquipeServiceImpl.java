@@ -4,8 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.dao.entities.Equipe;
-import tn.esprit.dao.entities.Etudiant;
 import tn.esprit.dao.repository.EquipeRepository;
+import tn.esprit.dto.EquipeDto;
+import tn.esprit.dto.EtudiantDto;
+import tn.esprit.dto.mapper.EquipeMapper;
 import tn.esprit.service.interfaces.EquipeService;
 
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.Optional;
 public class EquipeServiceImpl implements EquipeService {
     @Autowired
     EquipeRepository equipeRep;
+    @Autowired
+    EquipeMapper eqMapper;
 
     @Override
     public Optional<Equipe> afficherEquipe(int id) {
@@ -26,6 +30,18 @@ public class EquipeServiceImpl implements EquipeService {
         );
         return equipeRep.findById(id);
     }
+
+    @Override
+    public Optional<EquipeDto> afficherEquipeDto(int id) {
+
+        Equipe equipe = equipeRep.findById(id).orElseThrow(() -> new RuntimeException(
+                        "equipe with Id" + id + " does not exist"
+                )
+        );
+        EquipeDto equipeDto = eqMapper.toDto(equipe);
+        return Optional.ofNullable(equipeDto);
+    }
+
 
     @Override
     public int ajouterEquipe(Equipe e) {
@@ -49,11 +65,12 @@ public class EquipeServiceImpl implements EquipeService {
     }
 
     @Override
-    public List<Equipe> chercherEquipes() {
+    public List<EquipeDto> chercherEquipes() {
         List<Equipe> equipes = (List<Equipe>) equipeRep.findAll();
-        for(Equipe equipe: equipes) {
+        List<EquipeDto> equipeDtos = eqMapper.toDtoList(equipes);
+        for(EquipeDto equipe: equipeDtos) {
             log.info("equipe : " + equipe);
         }
-        return equipes;
+        return equipeDtos;
     }
 }

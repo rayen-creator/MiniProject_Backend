@@ -1,5 +1,6 @@
 package tn.esprit.service.interfaces;
 
+import tn.esprit.dao.entities.Departement;
 import tn.esprit.dao.entities.Universite;
 
 import java.util.List;
@@ -12,6 +13,8 @@ public interface UniversiteService {
     public void supprimerUniversite(int id);
     public List<Universite> chercherUniversites ();
 
-    void assignUniversiteToDepartement(Integer idUniversite, Integer
+   public void assignUniversiteToDepartement(Integer idUniversite, Integer
             idDepartement);
+
+    public List<Departement> retrieveDepartementsByUniversite(Integer idUniversite);
 }

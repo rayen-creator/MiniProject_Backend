@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.dao.entities.Contrat;
+import tn.esprit.dto.ContratDto;
 import tn.esprit.service.interfaces.ContratService;
 import javax.validation.Valid;
 
@@ -20,13 +21,14 @@ public class ContratController {
     ContratService cServ;
 
     @GetMapping
-    public List<Contrat> displayAllContrat() {
-        return cServ.chercherContrats();
+    public List<ContratDto> displayAllContrat() {
+        return cServ.chercherContratsDto();
     }
 
     @GetMapping("display/{id}")
-    public Optional<Contrat> displayContratById(@PathVariable("id") int id) {
-        return cServ.afficherContrat(id);
+    public Optional<ContratDto> displayContratById(@PathVariable("id") int id) {
+
+        return cServ.afficherContratDto(id);
     }
 
     @DeleteMapping("delete/{id}")

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.dao.entities.Departement;
 import tn.esprit.dao.entities.Universite;
 import tn.esprit.service.interfaces.UniversiteService;
 import javax.validation.Valid;
@@ -58,4 +59,9 @@ public class universiteController {
         univServ.assignUniversiteToDepartement(idu,idd);
     }
 
+    @GetMapping("depByUni/{id}")
+    public List<Departement> displayDepByUni(@PathVariable("id") int id) {
+
+        return univServ.retrieveDepartementsByUniversite(id);
+    }
 }

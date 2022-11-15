@@ -3,6 +3,7 @@ package tn.esprit.dao.entities;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -27,9 +28,9 @@ public class Departement implements Serializable {
         private String nomDepart;
 
 
-
-        @OneToMany(cascade = CascadeType.ALL, mappedBy="departement")
-        private List<Etudiant> Etudiants;
+//
+//        @OneToMany(cascade = CascadeType.ALL, mappedBy="departement")
+//        private List<Etudiant> Etudiants;
 
 
 }

@@ -17,7 +17,6 @@ import tn.esprit.dto.mapper.EtudiantMapper;
 import tn.esprit.service.interfaces.EtudiantService;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -41,6 +40,17 @@ public class EtudiantServiceImpl implements EtudiantService {
                 )
         );
         return etudRep.findById(id);
+    }
+
+    @Override
+    public Optional<EtudiantDto> afficherEtudiantDto(int id) {
+
+        Etudiant student = etudRep.findById(id).orElseThrow(() -> new RuntimeException(
+                        "student with Id: " + id + " does not exist"
+                )
+        );
+        EtudiantDto etudiantDto = etudMap.toDto(student);
+        return Optional.ofNullable(etudiantDto);
     }
 
     @Override
@@ -119,6 +129,11 @@ public class EtudiantServiceImpl implements EtudiantService {
            log.info("etudiant "+e.getPrenomE()+" "+e.getNomE()+"a atteint la limite de contrats actifs !");
            throw new Exception("limite contrats atteint !");
        }
-
+    }
+    @Override
+    public List<EtudiantDto> getEtudiantsByDepartement(Integer idDepartement){
+        List<Etudiant> list = etudRep.EtudByDep(idDepartement);
+        List<EtudiantDto> etudiantDepDtoList = etudMap.toDtoList(list);
+        return etudiantDepDtoList;
     }
 }

@@ -33,8 +33,8 @@ return etudServ.chercherEtudiants();
     }
 
     @GetMapping("display/{id}")
-    public Optional<Etudiant> displayStudentById(@PathVariable("id") int id) {
-        return etudServ.afficherEtudiant(id);
+    public Optional<EtudiantDto> displayStudentById(@PathVariable("id") int id) {
+        return etudServ.afficherEtudiantDto(id);
     }
 
     @DeleteMapping("delete/{id}")
@@ -78,4 +78,9 @@ return etudServ.chercherEtudiants();
         etudServ.affectContratToEtudiant(c,nomE,prenomE);
     }
 
+
+    @GetMapping("EtudByDep/{id}")
+    public List<EtudiantDto> EtudByDep(@PathVariable("id") Integer id){
+      return etudServ.getEtudiantsByDepartement(id);
+    }
 }
