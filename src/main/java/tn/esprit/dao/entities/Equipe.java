@@ -22,11 +22,12 @@ public class Equipe implements Serializable {
         @Column(name = "idEquipe")
         private Integer idEquipe; // Clé primaire
         private String nomEquipe;
+        private String image;
         @Enumerated(EnumType.STRING)
         private Niveau niveau;
         @ManyToMany(cascade = CascadeType.ALL)
         private List<Etudiant> etudiants;
-        @OneToOne
+        @OneToOne(cascade = CascadeType.ALL )
         private DetailEquipe detailEquipe;
 
 }

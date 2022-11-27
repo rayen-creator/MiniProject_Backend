@@ -5,7 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.dao.entities.DetailEquipe;
+import tn.esprit.dto.DetailEquipeDto;
 import tn.esprit.service.interfaces.DetailEquipeService;
+import tn.esprit.service.interfaces.EquipeService;
+
 import javax.validation.Valid;
 
 import java.util.List;
@@ -13,20 +16,23 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 @RequestMapping("/detailEquipe")
 public class detailEquipeController {
 
     @Autowired
     DetailEquipeService detServ;
+    @Autowired
+    EquipeService eqServ;
 
     @GetMapping
-    public List<DetailEquipe> displayAllDetails() {
+    public List<DetailEquipeDto> displayAllDetails() {
         return detServ.chercherDetailEquipes();
     }
 
     @GetMapping("display/{id}")
-    public Optional<DetailEquipe> displayDetailsById(@PathVariable("id") int id) {
-        return detServ.afficherDetailEquipe(id);
+    public Optional<DetailEquipeDto> displayDetailsById(@PathVariable("id") int id) {
+        return detServ.afficherDetailEquipeDto(id);
     }
 
     @DeleteMapping("delete/{id}")
@@ -39,6 +45,7 @@ public class detailEquipeController {
             @Valid @RequestBody DetailEquipe detailEquipe)
     {
         return detServ.ajouterDetailEquipe(detailEquipe);
+
     }
 
     @PutMapping("update/{id}")
@@ -52,5 +59,7 @@ public class detailEquipeController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+
 
 }

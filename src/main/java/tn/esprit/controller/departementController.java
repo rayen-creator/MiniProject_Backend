@@ -13,6 +13,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 @RequestMapping("/departement")
 public class departementController {
 

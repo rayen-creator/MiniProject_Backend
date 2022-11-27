@@ -2,10 +2,12 @@ package tn.esprit.service.classes;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import tn.esprit.dao.entities.Departement;
+import tn.esprit.dao.entities.DetailEquipe;
 import tn.esprit.dao.entities.Equipe;
-import tn.esprit.dao.entities.Niveau;
+import tn.esprit.dao.entities.Etudiant;
+import tn.esprit.dao.repository.DetailEquipeRepository;
 import tn.esprit.dao.repository.EquipeRepository;
 import tn.esprit.dto.ContratDto;
 import tn.esprit.dto.EquipeDto;
@@ -27,6 +29,8 @@ import static tn.esprit.dao.entities.Niveau.SENIOR;
 public class EquipeServiceImpl implements EquipeService {
     @Autowired
     EquipeRepository equipeRep;
+    @Autowired
+    DetailEquipeRepository DequipeRep;
     @Autowired
     EquipeMapper eqMapper;
 
@@ -82,7 +86,14 @@ public class EquipeServiceImpl implements EquipeService {
         }
         return equipeDtos;
     }
-    @Scheduled(cron = "*/05 * * * * *" )
+    @Override
+    public void assignEquipeToDetail(Integer equipeId, DetailEquipe detail){
+        Equipe e = equipeRep.findById(equipeId).get();
+
+        e.setDetailEquipe(detail);
+        equipeRep.save(e);
+
+    }
     @Transactional
     @Override
     public void faireEvoluerEquipes(){
@@ -104,6 +115,7 @@ public class EquipeServiceImpl implements EquipeService {
                             compt++;
                             if (Objects.equals(equipe.getNiveau().toString(), "JUNIOR") && compt >=1 ){
                                 equipe.setNiveau(SENIOR);
+                              Equipe Upgraded = eqMapper.toEntity(equipe);
                             } else if (Objects.equals(equipe.getNiveau().toString(), "SENIOR") && compt >=1) {
                                 equipe.setNiveau(EXPERT);
                             }

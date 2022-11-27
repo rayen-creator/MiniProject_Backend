@@ -4,8 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.dao.entities.DetailEquipe;
-import tn.esprit.dao.entities.Etudiant;
+import tn.esprit.dao.entities.Equipe;
 import tn.esprit.dao.repository.DetailEquipeRepository;
+import tn.esprit.dao.repository.EquipeRepository;
+import tn.esprit.dto.DetailEquipeDto;
+import tn.esprit.dto.mapper.DetailEquipeMapper;
 import tn.esprit.service.interfaces.DetailEquipeService;
 
 import java.util.List;
@@ -16,6 +19,10 @@ import java.util.Optional;
 public class DetailEquipeServiceImpl implements DetailEquipeService {
     @Autowired
     DetailEquipeRepository detailEquipeRep;
+    @Autowired
+    EquipeRepository equipeRep;
+    @Autowired
+    DetailEquipeMapper detailMapper;
 
     @Override
     public Optional<DetailEquipe> afficherDetailEquipe(int id) {
@@ -25,6 +32,17 @@ public class DetailEquipeServiceImpl implements DetailEquipeService {
                 )
         );
         return detailEquipeRep.findById(id);
+    }
+
+    @Override
+    public Optional<DetailEquipeDto> afficherDetailEquipeDto(int id) {
+
+        DetailEquipe dEquipe = detailEquipeRep.findById(id).orElseThrow(() -> new RuntimeException(
+                        "equipe with Id" + id + " does not exist"
+                )
+        );
+        DetailEquipeDto dEquipeDto = detailMapper.toDto(dEquipe);
+        return Optional.ofNullable(dEquipeDto);
     }
 
     @Override
@@ -49,11 +67,13 @@ public class DetailEquipeServiceImpl implements DetailEquipeService {
     }
 
     @Override
-    public List<DetailEquipe> chercherDetailEquipes() {
+    public List<DetailEquipeDto> chercherDetailEquipes() {
         List<DetailEquipe> detailEquipes = (List<DetailEquipe>) detailEquipeRep.findAll();
-        for(DetailEquipe detailEquipe: detailEquipes) {
+        List<DetailEquipeDto> detailEquipeDtos = detailMapper.toDtoList(detailEquipes);
+        for(DetailEquipeDto detailEquipe: detailEquipeDtos) {
             log.info("detail equipe : " + detailEquipe);
         }
-        return detailEquipes;
+        return detailEquipeDtos;
     }
+
 }

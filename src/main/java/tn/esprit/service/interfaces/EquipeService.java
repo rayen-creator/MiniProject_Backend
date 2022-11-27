@@ -1,5 +1,6 @@
 package tn.esprit.service.interfaces;
 
+import tn.esprit.dao.entities.DetailEquipe;
 import tn.esprit.dao.entities.Equipe;
 import tn.esprit.dao.entities.Equipe;
 import tn.esprit.dto.EquipeDto;
@@ -17,5 +18,8 @@ public interface EquipeService {
     public Equipe mettreAjourEquipe(int id);
     public void supprimerEquipe(int id);
     public List<EquipeDto> chercherEquipes ();
+
+    void assignEquipeToDetail(Integer equipeId, DetailEquipe detail);
+
     public void faireEvoluerEquipes();
 }

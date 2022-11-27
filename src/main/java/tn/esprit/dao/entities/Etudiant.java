@@ -34,6 +34,7 @@ public class Etudiant implements Serializable {
     @Enumerated(EnumType.STRING)
     private Option option;
 
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy="etudiant")
     private List<Contrat> Contrats;
 

@@ -14,9 +14,9 @@ import java.io.Serializable;
 public class DetailEquipeDto implements Serializable{
     private static final long serialVersionUID = 1L;
     private Integer idDetailEquipe; // Clé primaire
-    private Integer salle;
+    private String salle;
     private String thematique;
-
+    private  String description;
 
 
 }

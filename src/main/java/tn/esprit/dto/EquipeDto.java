@@ -21,11 +21,12 @@ public class EquipeDto implements Serializable {
 
     private Integer idEquipe; // Clé primaire
     private String nomEquipe;
+    private String image;
     @Enumerated(EnumType.STRING)
     private Niveau niveau;
 
     private List<EtudiantDto> etudiants;
 
-    private DetailEquipe detailEquipe;
+    private DetailEquipeDto detailEquipe;
 
 }

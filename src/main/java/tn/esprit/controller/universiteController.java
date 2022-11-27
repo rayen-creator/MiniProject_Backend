@@ -14,6 +14,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 @RequestMapping("/universite")
 public class universiteController {
 
