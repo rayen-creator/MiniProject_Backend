@@ -32,4 +32,5 @@ import java.util.Date;
 
         @ManyToOne
         Etudiant etudiant;
+
     }
