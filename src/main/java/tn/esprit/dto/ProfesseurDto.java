@@ -24,7 +24,6 @@ public class ProfesseurDto implements Serializable {
     private Integer age;
     private String phone;
     private String email;
-    private String motDePasse;
     private String image;
 
     private List<Contrat> Contrats;

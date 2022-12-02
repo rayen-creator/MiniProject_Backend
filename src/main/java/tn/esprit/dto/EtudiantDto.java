@@ -24,6 +24,7 @@ public class EtudiantDto implements Serializable {
     private Integer idEtudiant; // Clé primaire
     private String prenomE;
     private String nomE;
+    private String image;
     @Temporal (TemporalType.DATE)
     private Date dateDebut;
     @Enumerated(EnumType.STRING)
