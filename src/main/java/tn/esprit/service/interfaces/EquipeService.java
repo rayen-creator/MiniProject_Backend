@@ -1,5 +1,7 @@
 package tn.esprit.service.interfaces;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import tn.esprit.dao.entities.DetailEquipe;
 import tn.esprit.dao.entities.Equipe;
 import tn.esprit.dao.entities.Equipe;
@@ -19,7 +21,10 @@ public interface EquipeService {
     public void supprimerEquipe(int id);
     public List<EquipeDto> chercherEquipes ();
 
+    public Page<Equipe> chercherEquipesList (Pageable pageable);
+
     void assignEquipeToDetail(Integer equipeId, DetailEquipe detail);
 
     public void faireEvoluerEquipes();
+    Page<Equipe> findAllByNomEquipeContaining(String nomEquipe, Pageable pageable);
 }

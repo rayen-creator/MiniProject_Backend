@@ -43,8 +43,8 @@ public class Etudiant implements Serializable {
 
 
 
-    @ManyToMany(mappedBy="etudiants", cascade = CascadeType.ALL)
-    private List<Equipe> equipes;
+//    @ManyToMany
+//    private List<Equipe> equipes;
 
 
 }

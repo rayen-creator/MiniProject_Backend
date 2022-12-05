@@ -2,6 +2,8 @@ package tn.esprit.service.classes;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tn.esprit.dao.entities.Departement;
 import tn.esprit.dao.entities.DetailEquipe;
@@ -86,6 +88,11 @@ public class EquipeServiceImpl implements EquipeService {
         }
         return equipeDtos;
     }
+
+    @Override
+    public Page<Equipe> chercherEquipesList(Pageable pageable) {
+       return equipeRep.findAll(pageable);
+    }
     @Override
     public void assignEquipeToDetail(Integer equipeId, DetailEquipe detail){
         Equipe e = equipeRep.findById(equipeId).get();
@@ -124,5 +131,10 @@ public class EquipeServiceImpl implements EquipeService {
                 }
             }
         }
+    }
+
+    @Override
+    public Page<Equipe> findAllByNomEquipeContaining(String nomEquipe, Pageable pageable) {
+        return equipeRep.findAllByNomEquipeContaining(nomEquipe, pageable);
     }
 }
