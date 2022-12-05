@@ -8,22 +8,14 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EtudiantService {
-    public Optional<Etudiant> afficherEtudiant(int id);
+    public Etudiant AfficherEtudiant(int id);
+    public int AjouterEtudiant(Etudiant E);
+    public Etudiant MettreAjourEtudiant(Etudiant E);
+    public void SupprimerEtudiant(int id);
+    public List<Etudiant> ChecherEtudiant();
 
-    Optional<EtudiantDto> afficherEtudiantDto(int id);
+    public void assignEtudiantToDepartement(Integer etudiantId, Integer  departementId) ;
 
-    public int ajouterEtudiant(Etudiant e);
-    public Etudiant mettreAjourEtudiant(int id);
-    public void supprimerEtudiant(int id);
-    public List<EtudiantDto> chercherEtudiants ();
-
-   public void assignEtudiantToDepartement(Integer etudiantId, Integer
-            departementId) ;
-
-    Etudiant addAndAssignEtudiantToEquipeAndContract(Etudiant e, Integer idContrat, Integer idEquipe);
-
-    List<EtudiantDto> getEtudiantsByDepartement (Integer idDepartement);
-
-
-    public void affectContratToEtudiant(Contrat ce, String nomE, String prenomE) throws Exception;
+    public  List<Etudiant> getEtudiantsByDepartement (Integer idDepartement);
+    public void affectContratToEtudiant(Contrat ce, String nomE, String prenomE) ;
 }

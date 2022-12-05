@@ -22,29 +22,41 @@ import java.util.Set;
 @NoArgsConstructor
 @Table( name = "Etudiant")
 public class Etudiant implements Serializable {
-    private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="idEtudiant")
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
+
     private Integer idEtudiant; // Clé primaire
     private String prenomE;
     private String nomE;
-    @Temporal (TemporalType.DATE)
+    private String Email;
+    private String adress;
+    private Integer age;
+    private Integer phone;
+    private String image;
+    @Temporal(TemporalType.DATE)
     private Date dateDebut;
     @Enumerated(EnumType.STRING)
     private Option option;
-
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy="etudiant")
-    private List<Contrat> Contrats;
-
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "etudiant")
+    private Set<Contrat> Contrat ;
+    @JsonIgnore
     @ManyToOne
     Departement departement;
+    //@JsonIgnore
+    //@ManyToMany(mappedBy="etudiant", cascade = CascadeType.ALL)
+    //private List<Equipe> equipe;
+    @Override
+    public String toString() {
+        return "Etudiant [idEtudiant=" + idEtudiant + ", prenomE=" + prenomE + ", nomE=" + nomE + ", dateDebut="
+                + dateDebut + ", option=" + option + "]";
+    }
 
 
 
-//    @ManyToMany
-//    private List<Equipe> equipes;
+
+
+
 
 
 }

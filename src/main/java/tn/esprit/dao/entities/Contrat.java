@@ -1,5 +1,6 @@
 package tn.esprit.dao.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -32,5 +33,9 @@ import java.util.Date;
 
         @ManyToOne
         Etudiant etudiant;
+
+        @JsonIgnore
+        @ManyToOne
+        Entreprise entreprise;
 
     }

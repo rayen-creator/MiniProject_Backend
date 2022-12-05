@@ -28,50 +28,40 @@ public class etudiantController {
     @Autowired
     ContratRepository cRep;
 
-    @GetMapping
-    public List<EtudiantDto> displayAllStudent() {
-return etudServ.chercherEtudiants();
+    @GetMapping("/Display")
+    public List<Etudiant> DisplayAllStudent() {
+        return etudServ.ChecherEtudiant();
     }
 
-    @GetMapping("display/{id}")
-    public Optional<EtudiantDto> displayStudentById(@PathVariable("id") int id) {
-        return etudServ.afficherEtudiantDto(id);
+
+    @PostMapping("/Add")
+    public int addEtudiant(@RequestBody Etudiant e){
+        return etudServ.AjouterEtudiant(e);
     }
 
-    @DeleteMapping("delete/{id}")
-    public void deleteStudentById(@PathVariable("id") int id) {
-        etudServ.supprimerEtudiant(id);
+    @GetMapping("/Retrieve/{id}")
+    public Etudiant retrieveOperateur(@PathVariable("id") int id) {
+        return etudServ.AfficherEtudiant(id);
     }
 
-    @PostMapping("/add")
-    public int saveStudent(
-            @Valid @RequestBody Etudiant etudiant)
-    {
-        return etudServ.ajouterEtudiant(etudiant);
+    @DeleteMapping("/Remove/{id}")
+    public void removeOperateur(@PathVariable("id") int id) {
+        etudServ.SupprimerEtudiant(id);
     }
 
-    @PutMapping("update/{id}")
-    public ResponseEntity<?> update(@Valid @RequestBody Etudiant etudiant, @PathVariable Integer id) {
-        try {
-            Optional<Etudiant> existEtud = etudServ.afficherEtudiant(id);
-            etudiant.setIdEtudiant(id);
-            etudServ.ajouterEtudiant(etudiant);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (NoSuchElementException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+
+    @PutMapping("/Modify/{id}")
+    public Etudiant modifyOperateur(@RequestBody Etudiant e, @PathVariable("id") Integer id ) {
+// Etudiant etud = etudRep.findById(id).get();
+        return etudServ.MettreAjourEtudiant(e);
     }
 
     @PutMapping("affect/{ide}/{idd}")
     public void affect(@PathVariable("ide") Integer ide,@PathVariable("idd") Integer idd) {
-       etudServ.assignEtudiantToDepartement(ide,idd);
+        etudServ.assignEtudiantToDepartement(ide,idd);
     }
 
-    @PutMapping("assign/{id}/{idc}/{ide}")
-    public void assign(@PathVariable("id") Integer id,@PathVariable("idc") Integer idc,@PathVariable("ide") Integer ide) {
-        Etudiant e = etudRep.findById(id).get();
-        etudServ.addAndAssignEtudiantToEquipeAndContract(e,idc,ide);
-    }
+
 
     @PutMapping("assignContrat/{idc}/{nomE}/{prenomE}")
     public void assignContrat(@PathVariable("idc") Integer idc,@PathVariable("nomE") String nomE,@PathVariable("prenomE") String prenomE) throws Exception {
@@ -81,7 +71,9 @@ return etudServ.chercherEtudiants();
 
 
     @GetMapping("EtudByDep/{id}")
-    public List<EtudiantDto> EtudByDep(@PathVariable("id") Integer id){
-      return etudServ.getEtudiantsByDepartement(id);
+    public List<Etudiant> EtudByDep(@PathVariable("id") Integer id){
+        return etudServ.getEtudiantsByDepartement(id);
     }
+
+
 }

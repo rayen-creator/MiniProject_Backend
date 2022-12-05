@@ -23,117 +23,87 @@ import java.util.Optional;
 @Slf4j
 public class EtudiantServiceImpl implements EtudiantService {
     @Autowired
-    EtudiantRepository etudRep;
+    EtudiantRepository etuRep;
     @Autowired
     DepartementRepository depRep;
     @Autowired
     ContratRepository conRep;
     @Autowired
-    EquipeRepository eqRep;
-    @Autowired
-    EtudiantMapper etudMap;
-    @Override
-    public Optional<Etudiant> afficherEtudiant(int id) {
+    EquipeRepository epRep;
 
-        Etudiant student = etudRep.findById(id).orElseThrow(() -> new RuntimeException(
-                        "student with Id: " + id + " does not exist"
-                )
-        );
-        return etudRep.findById(id);
+    @Override
+    public Etudiant AfficherEtudiant(int id) {
+        Etudiant etudiant =(Etudiant) etuRep.findById(id).get();
+        log.info("Etudiant :"+ etudiant);
+
+        return etudiant;
     }
 
     @Override
-    public Optional<EtudiantDto> afficherEtudiantDto(int id) {
-
-        Etudiant student = etudRep.findById(id).orElseThrow(() -> new RuntimeException(
-                        "student with Id: " + id + " does not exist"
-                )
-        );
-        EtudiantDto etudiantDto = etudMap.toDto(student);
-        return Optional.ofNullable(etudiantDto);
+    public int AjouterEtudiant(Etudiant E) {
+        etuRep.save(E);
+        log.info(E+"Ajouter avec succee ");
+        return E.getIdEtudiant();
     }
 
     @Override
-    public int ajouterEtudiant(Etudiant e) {
-        etudRep.save(e);
-        log.info("etudiant "+e.getPrenomE()+" "+e.getNomE()+" ajouté avec success");
-        return e.getIdEtudiant();
-    }
-
-    @Override
-    public Etudiant mettreAjourEtudiant(int id) {
-        Etudiant e = etudRep.findById(id).get();
-        etudRep.save(e);
-        log.info("etudiant "+e.getPrenomE()+" "+e.getNomE()+" modifié avec success");
+    public Etudiant MettreAjourEtudiant(Etudiant e) {
+        Etudiant etudiant = etuRep.findById(e.getIdEtudiant()).orElse(null);
+        if (etudiant != null)
+            etuRep.save(e);
+        log.info("Mise à jour réussie:"+e );
         return (e);
     }
 
     @Override
-    public void supprimerEtudiant(int id) {
-
-        etudRep.deleteById(id);
-        log.info("etudiant supprimé");
+    public void SupprimerEtudiant(int id) {
+        etuRep.deleteById(id);
+        log.info("supprimé" );
     }
+
     @Override
-    public List<EtudiantDto> chercherEtudiants() {
-        List<Etudiant> etudiants = (List<Etudiant>) etudRep.findAll();
-        List<EtudiantDto> etudiantDtoList = etudMap.toDtoList(etudiants);
-        for(EtudiantDto etudiant: etudiantDtoList) {
-            log.info("etudiant : " + etudiant);
+    public List<Etudiant> ChecherEtudiant() {
+
+        List<Etudiant> etudiants =(List<Etudiant>) etuRep.findAll();
+        for(Etudiant etudiant : etudiants){
+            log.info("Etudiant : "+ etudiant);
+
         }
-        return etudiantDtoList;
+        return etudiants;
     }
 
     @Override
-    public void assignEtudiantToDepartement(Integer etudiantId, Integer
-            departementId) {
-    Etudiant e = etudRep.findById(etudiantId).get();
+    public void assignEtudiantToDepartement(Integer etudiantId, Integer departementId) {
+        Etudiant e =(Etudiant) etuRep.findById(etudiantId).get();
         Departement d = depRep.findById(departementId).get();
         e.setDepartement(d);
-        etudRep.save(e);
+        etuRep.save(e);
         log.info("etudiant "+e.getPrenomE()+" "+e.getNomE()+" assigné au departement "+d.getNomDepart());
-    }
-    @Override
-    public Etudiant addAndAssignEtudiantToEquipeAndContract(Etudiant e, Integer idContrat, Integer idEquipe) {
-        Contrat c = conRep.findById(idContrat).get();
-        Equipe eq = eqRep.findById(idEquipe).get();
-        c.setEtudiant(e);
-        eq.getEtudiants().add(e);
-        conRep.save(c);
-        eqRep.save(eq);
-        return e;
-    }
-    @Scheduled(fixedRate = 60000)
-    public void fixedRateMethod() {
-        System.out.println("Method with fixed Rate");
+
     }
 
-    @Scheduled(fixedDelay = 60000)
-    public void fixedDelayMethod() {
-        System.out.println("Method with fixed delay");
+
+
+    @Override
+    public List<Etudiant> getEtudiantsByDepartement(Integer idDepartement) {
+        List<Etudiant> etudiants =  etuRep.EtudByDep(idDepartement);
+        return etudiants;
     }
 
-    @Scheduled(cron = "*/60 * * * * *" )
-    public void cronMethod() {
-        System.out.println("Method with cron expression");
-    }
     @Override
-    public void affectContratToEtudiant(Contrat ce, String nomE, String prenomE) throws Exception {
-        Etudiant e = etudRep.retrieveEtudiantByNomPrenom(nomE, prenomE);
-          Integer total = etudRep.countC(e.getIdEtudiant());
-//        EtudiantDto ed = etudMap.toDto(e);
-       if (total < 5) {
-           ce.setEtudiant(e);
-           conRep.save(ce);
-       } else {
-           log.info("etudiant "+e.getPrenomE()+" "+e.getNomE()+"a atteint la limite de contrats actifs !");
-           throw new Exception("limite contrats atteint !");
-       }
+    public void affectContratToEtudiant(Contrat ce, String nomE, String prenomE) {
+        Etudiant e = etuRep.retrieveEtudiantByNomPrenom(nomE, prenomE);
+        Integer total = etuRep.countC(e.getIdEtudiant());
+        if (total < 5) {
+            ce.setEtudiant(e);
+            conRep.save(ce);
+        }else {
+            log.info("etudiant "+e.getPrenomE()+" "+e.getNomE()+"a atteint la limite de contrats actifs !");
+        }
+
+
+
     }
-    @Override
-    public List<EtudiantDto> getEtudiantsByDepartement(Integer idDepartement){
-        List<Etudiant> list = etudRep.EtudByDep(idDepartement);
-        List<EtudiantDto> etudiantDepDtoList = etudMap.toDtoList(list);
-        return etudiantDepDtoList;
-    }
+
+
 }
