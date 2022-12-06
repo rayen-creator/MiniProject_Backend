@@ -1,20 +1,14 @@
 package tn.esprit.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.dao.entities.Contrat;
 import tn.esprit.dao.entities.Etudiant;
 import tn.esprit.dao.repository.ContratRepository;
 import tn.esprit.dao.repository.EtudiantRepository;
-import tn.esprit.dto.EtudiantDto;
 import tn.esprit.service.interfaces.EtudiantService;
-import javax.validation.Valid;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")

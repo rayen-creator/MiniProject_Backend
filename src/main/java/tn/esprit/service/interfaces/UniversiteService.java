@@ -1,20 +1,27 @@
 package tn.esprit.service.interfaces;
 
-import tn.esprit.dao.entities.Departement;
 import tn.esprit.dao.entities.Universite;
 
 import java.util.List;
-import java.util.Optional;
+
 
 public interface UniversiteService {
-    public Optional<Universite> afficherUniversite(int id);
-    public int ajouterUniversite(Universite u);
-    public Universite mettreAjourUniversite(int id);
+
+    public Universite afficherUniversite(int id);
+
+    public Integer AjouterUniversite(Universite u);
+
+    public Universite mettreajourUniversite(int id, Universite u);
+
+    public List<Universite> afficherToutUniversite();
+
     public void supprimerUniversite(int id);
-    public List<Universite> chercherUniversites ();
 
-   public void assignUniversiteToDepartement(Integer idUniversite, Integer
-            idDepartement);
+    public void assignUniversiteToConvention(Integer idUniv, Integer idc);
 
-    public List<Departement> retrieveDepartementsByUniversite(Integer idUniversite);
+
+
+
+
+
 }
