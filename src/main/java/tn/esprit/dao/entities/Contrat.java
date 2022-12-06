@@ -6,17 +6,11 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
     @Entity
-    @Getter
-    @Setter
-    @ToString
-    @EqualsAndHashCode
-    @AllArgsConstructor
-    @NoArgsConstructor
     @Table( name = "Contrat")
     public class Contrat implements Serializable {
-        private static final long serialVersionUID = 1L;
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name="idContrat")
@@ -29,6 +23,12 @@ import java.util.Date;
         private Integer montantContrat;
         @Enumerated(EnumType.STRING)
         private Specialite specialite;
+        
+        
+        @OneToMany(mappedBy = "contrat")
+        @JsonIgnore
+        private Set<Mission> mission; 
+
 
 
         @ManyToOne
@@ -37,5 +37,98 @@ import java.util.Date;
         @JsonIgnore
         @ManyToOne
         Entreprise entreprise;
+        
+
+public Contrat(int idContrat, Date dateDebutContrat, Date dateFinContrat, Specialite specialite, Boolean archive,
+		int montantContrat, Etudiant etudiant) {
+	super();
+	this.idContrat = idContrat;
+	this.dateDebutContrat = dateDebutContrat;
+	this.dateFinContrat = dateFinContrat;
+	this.specialite = specialite;
+	this.archive = archive;
+	this.montantContrat = montantContrat;
+	this.etudiant = etudiant;
+}
+
+
+
+
+public Contrat() {
+
+}
+
+
+		public Integer getIdContrat() {
+			return idContrat;
+		}
+
+		public void setIdContrat(Integer idContrat) {
+			this.idContrat = idContrat;
+		}
+
+		public Date getDateDebutContrat() {
+			return dateDebutContrat;
+		}
+
+		public void setDateDebutContrat(Date dateDebutContrat) {
+			this.dateDebutContrat = dateDebutContrat;
+		}
+
+		public Date getDateFinContrat() {
+			return dateFinContrat;
+		}
+
+		public void setDateFinContrat(Date dateFinContrat) {
+			this.dateFinContrat = dateFinContrat;
+		}
+
+		public Boolean getArchive() {
+			return archive;
+		}
+
+		public void setArchive(Boolean archive) {
+			this.archive = archive;
+		}
+
+		public Integer getMontantContrat() {
+			return montantContrat;
+		}
+
+		public void setMontantContrat(Integer montantContrat) {
+			this.montantContrat = montantContrat;
+		}
+
+		public Specialite getSpecialite() {
+			return specialite;
+		}
+
+		public void setSpecialite(Specialite specialite) {
+			this.specialite = specialite;
+		}
+
+		public Etudiant getEtudiant() {
+			return etudiant;
+		}
+
+		public void setEtudiant(Etudiant etudiant) {
+			this.etudiant = etudiant;
+		}
+
+		public Entreprise getEntreprise() {
+			return entreprise;
+		}
+
+		public void setEntreprise(Entreprise entreprise) {
+			this.entreprise = entreprise;
+		}
+        
+		@Override
+		public String toString() {
+			return "Contrat [idContrat=" + idContrat + ", dateDebutContrat=" + dateDebutContrat + ", dateFinContrat="
+					+ dateFinContrat + ", specialite=" + specialite + ", archive=" + archive + ", montantContrat="
+					+ montantContrat + ", etudiant=" + etudiant + "]";
+		}
+
 
     }
