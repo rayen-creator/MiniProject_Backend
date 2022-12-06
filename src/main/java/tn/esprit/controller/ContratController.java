@@ -16,7 +16,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/contrat")
 public class ContratController {
 
@@ -24,14 +24,15 @@ public class ContratController {
     ContratService cServ;
 
     @GetMapping
-    public List<ContratDto> displayAllContrat() {
+    public List<Contrat> displayAllContrat() {
+    	System.out.println("Last     "+cServ.chercherContratsDto());
         return cServ.chercherContratsDto();
     }
 
     @GetMapping("display/{id}")
-    public Optional<ContratDto> displayContratById(@PathVariable("id") int id) {
+    public Contrat displayContratById(@PathVariable("id") int id) {
 
-        return cServ.afficherContratDto(id);
+        return cServ.afficherContrat(id);
     }
 
     @DeleteMapping("delete/{id}")
@@ -46,17 +47,41 @@ public class ContratController {
         return cServ.ajouterContrat(contrat);
     }
 
-    @PutMapping("update/{id}")
-    public ResponseEntity<?> update(@Valid @RequestBody Contrat contrat, @PathVariable Integer id) {
-        try {
-            Optional<Contrat> existC= cServ.afficherContrat(id);
-            contrat.setIdContrat(id);
-            cServ.ajouterContrat(contrat);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (NoSuchElementException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    @PutMapping("update")
+    public Contrat update(@Valid @RequestBody Contrat contrat) {
+        
+        	return cServ.mettreAjourContrat(contrat);
     }
+    
+    
+	@GetMapping("addcontratToEtudiant/{idetudiant}/{idcontrat}")
+	public int addcontratToEtudiant(@PathVariable("idetudiant") int idetudiant,@PathVariable("idcontrat") int idc) {;
+	/*
+	Etudiant e = etudrep.findById(idetudiant).get();
+	JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+	mailSender.setHost("smtp.gmail.com");
+	mailSender.setPort(465);
+	
+	mailSender.setUsername(sender);
+	mailSender.setPassword(password);
+	 
+	Properties properties = new Properties();
+	properties.setProperty("mail.smtp.auth", "true");
+	properties.setProperty("mail.smtp.starttls.enable", "true");
+	 
+	mailSender.setJavaMailProperties(properties);
+	
+	SimpleMailMessage message = new SimpleMailMessage();
+	 
+	message.setFrom(sender);
+	message.setTo("emna.taalouch@esprit.tn");
+	message.setSubject("Affectation d'un contrat");
+	message.setText("Bonjour"+e.getPrenomE()+" "+e.getNomE()+", on vous a affecté le contrat de l'id: "+idc);
+	 
+	mailSender.send(message);
+   */
+		return cServ.affecterContratToEtudiant(idetudiant,idc);
+	}
 
     @GetMapping("conByDate/{dateDebut}/{dateFin}")
     public List<ContratDto> displayContratByDate(@PathVariable("dateDebut") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateDebut, @PathVariable("dateFin") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateFin) {

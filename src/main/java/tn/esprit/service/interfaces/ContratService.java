@@ -9,19 +9,21 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ContratService {
-    public Optional<Contrat> afficherContrat(int id);
+    public Contrat afficherContrat(int id);
 
-    Optional<ContratDto> afficherContratDto(int id);
+    List<Contrat> afficherContratDto(int id);
 
     public int ajouterContrat(Contrat c);
-    public Contrat mettreAjourContrat(int id);
+    public Contrat mettreAjourContrat(Contrat c);
     public void supprimerContrat(int id);
     public List<Contrat> chercherContrats ();
 
-    List<ContratDto> chercherContratsDto();
+    List<Contrat> chercherContratsDto();
 
     @Scheduled(cron="* * 13 * * *")
      public String retrieveAndUpdateStatusContrat();
+    
+    public int affecterContratToEtudiant(int i,int idc);
 
     public List<ContratDto> ContratsValides(Date startDate, Date endDate);
     public  Integer nbContratsValides(Date startDate, Date endDate);

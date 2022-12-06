@@ -46,6 +46,8 @@ public class Etudiant implements Serializable {
     //@JsonIgnore
     //@ManyToMany(mappedBy="etudiant", cascade = CascadeType.ALL)
     //private List<Equipe> equipe;
+    
+    
     @Override
     public String toString() {
         return "Etudiant [idEtudiant=" + idEtudiant + ", prenomE=" + prenomE + ", nomE=" + nomE + ", dateDebut="

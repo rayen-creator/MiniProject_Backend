@@ -31,23 +31,14 @@ public class ContratServiceImpl implements ContratService {
     ContratMapper cMapper;
 
     @Override
-    public Optional<Contrat> afficherContrat(int id) {
+    public Contrat afficherContrat(int id) {
 
-        Contrat contrat = cRep.findById(id).orElseThrow(() -> new RuntimeException(
-                        "contrat with Id" + id + " does not exist"
-                )
-        );
-        return cRep.findById(id);
+    	return cRep.findById(id).get();
     }
     @Override
-    public Optional<ContratDto> afficherContratDto(int id) {
+    public List<Contrat> afficherContratDto(int id) {
 
-        Contrat contrat = cRep.findById(id).orElseThrow(() -> new RuntimeException(
-                        "contrat with Id" + id + " does not exist"
-                )
-        );
-        ContratDto contratDto = cMapper.toDto(contrat);
-        return Optional.ofNullable(contratDto);
+    	return cRep.findAll();
     }
 
     @Override
@@ -57,13 +48,7 @@ public class ContratServiceImpl implements ContratService {
         return c.getIdContrat();
     }
 
-    @Override
-    public Contrat mettreAjourContrat(int id) {
-        Contrat c = cRep.findById(id).get();
-        cRep.save(c);
-        log.info("contrat "+c.getIdContrat()+" modifié avec success");
-        return (c);
-    }
+
 
     @Override
     public void supprimerContrat(int id) {
@@ -79,15 +64,7 @@ public class ContratServiceImpl implements ContratService {
         }
         return contrats;
     }
-    @Override
-    public List<ContratDto> chercherContratsDto() {
-        List<Contrat> contrats = (List<Contrat>) cRep.findAll();
-        List<ContratDto> contratDtoList = cMapper.toDtoList(contrats);
-        for(ContratDto contrat: contratDtoList) {
-            log.info("contrat : " + contrat);
-        }
-        return contratDtoList;
-    }
+
     @Scheduled(cron="* * 13 * * *")
     @Override
     public String retrieveAndUpdateStatusContrat() {
@@ -119,6 +96,11 @@ public class ContratServiceImpl implements ContratService {
         return count;
 
     }
+    
+	@Override
+	public int affecterContratToEtudiant(int i,int idc) {
+      return cRep.affecterContratToEtudiant(i,idc);	
+	}
 
     @Override
     public float getChiffreAffaireEntreDeuxDate(Date startDate, Date endDate) {
@@ -163,4 +145,22 @@ public class ContratServiceImpl implements ContratService {
         System.out.println(daysDiff);
         return total;
     }
+	@Override
+	public Contrat mettreAjourContrat(Contrat c) {
+			Contrat ce1=afficherContrat(c.getIdContrat());
+		//log.info(""+ce.getIdContrat()+"Data before saving:");
+	     // log.info("saving new contrat values  ...");
+	     if(c.hashCode()!=ce1.hashCode()) {
+	    	 // log.info("new Value saved "+ce);
+	     }else {
+	    	//  log.info("not saved "+ce);
+
+	     }
+	      return cRep.saveAndFlush(c);
+	}
+	@Override
+	public List<Contrat> chercherContratsDto() {
+		System.out.println(cRep.findAll());
+		return cRep.findAll();
+	}
 }
